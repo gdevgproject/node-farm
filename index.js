@@ -2,8 +2,10 @@ import { createServer } from "http";
 import { fileURLToPath } from "url";
 import path from "path";
 import { openAsBlob, readFile, readFileSync } from "fs";
-import url from "url";
 import { replaceTemplate } from "./modules.js/replaceTemplate.js";
+import url from "url";
+
+import slugify from "slugify";
 // SERVER
 
 const __dirname = (relativePath) =>
@@ -24,6 +26,9 @@ const tempProduct = readFileSync(
 
 const data = readFileSync(__dirname("./dev-data/data.json"), "utf-8");
 const dataObj = JSON.parse(data);
+
+const slugs = dataObj.map((el) => slugify(el.productName, { lower: true }));
+console.log(slugs);
 
 const server = createServer((req, res) => {
   const { query, pathname } = url.parse(req.url, true);
